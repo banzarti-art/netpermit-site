@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Privacy policy · NetPermit</title>
+<meta name="description" content="NetPermit&#x27;s privacy policy: what stays on your phone, and the nothing that leaves it.">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to the content</a>
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="index.html"><img src="assets/icon.svg" alt="" width="36" height="36">NetPermit</a>
+    <nav class="site" aria-label="Pages">
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="how-to.html">How to use it</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="privacy.html" aria-current="page">Privacy</a></li>
+        <li><a href="terms.html">Terms and payments</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+<main id="main">
+  <div class="wrap">
+<h1>Privacy policy</h1>
+<p class="updated">Effective 21 November 2026. This policy covers the NetPermit app for Android
+(<code>com.netpermit.app</code>) and this website.</p>
+
+<div class="plain"><p><strong>The short version.</strong> NetPermit controls which apps on your phone
+can use the Internet, and it does that on your phone. It has no account, shows no ads, and does not
+send your data to us or to anyone else. We do not have servers that receive information from the
+app.</p></div>
+
+<h2>How NetPermit works</h2>
+<p>NetPermit uses Android's VPN feature (<code>VpnService</code>) to block the apps you have not
+allowed. Android calls this a VPN and shows a key icon while it is on, but NetPermit is not a VPN
+service: it does not route your traffic through a remote server and it does not change your IP
+address.</p>
+<ul>
+  <li>Apps you <strong>block</strong> have their connection attempts sent to NetPermit on your
+  phone, where they are discarded.</li>
+  <li>Apps you <strong>allow</strong> connect to the Internet directly. Their traffic does not pass
+  through NetPermit and NetPermit cannot see it.</li>
+</ul>
+<p>NetPermit never reads, stores or changes the content of any connection, and it does not decrypt
+anything.</p>
+
+<h2>What NetPermit keeps on your phone</h2>
+<p>All of this stays on your device.</p>
+<ul>
+  <li><strong>The list of apps on your phone.</strong> NetPermit asks Android for the list of every
+  app and system component installed, so that there is a switch for each one. A firewall cannot
+  control what it cannot name. The list is used only to show and apply your rules. It is not sent
+  anywhere.</li>
+  <li><strong>Your rules.</strong> Which apps you allowed or blocked, and any time limits.</li>
+  <li><strong>Blocked activity.</strong> When a blocked app tries to connect, NetPermit records
+  which app it was and the site name it asked for or the address it aimed at, with a count. This is
+  encrypted on your phone and deleted after 1 day on Free, 7 days on Plus or 30 days
+  on Pro. You can delete it, or switch recording off, in the app at any time.</li>
+  <li><strong>Counts and history.</strong> How many connection attempts were blocked, and when
+  protection was on, off or could not be confirmed.</li>
+  <li><strong>App usage time</strong>, only if you choose to grant Android's Usage Access
+  permission. It is optional.</li>
+  <li><strong>Device health and security settings</strong> read from Android, for example the
+  battery level or whether a screen lock is set, so the app can show them to you.</li>
+  <li><strong>Which plan you have.</strong></li>
+</ul>
+
+<h2>What leaves your phone</h2>
+<p>Nothing is sent to us. NetPermit has no analytics, no crash-reporting service, no advertising
+identifier and no cloud backup of its data. Android's own backup of app data is switched off for
+NetPermit. The app itself opens no connection to any server.</p>
+<p>Two things involve someone else, and only when you choose them:</p>
+<ul>
+  <li><strong>Buying a plan.</strong> Purchases are handled by Google Play under Google's terms and
+  privacy policy. NetPermit asks Google Play which plan you have, and learns only that. We do not
+  receive your name, your email address or your payment details from the app.</li>
+  <li><strong>Saving a file.</strong> If you choose Export rules, or Save to a file in Blocked
+  activity, NetPermit writes a file to the place you pick. What happens to that file afterwards is
+  up to you.</li>
+</ul>
+<p>If you write to us by email, we receive your email address and whatever you send, and use it
+only to answer you.</p>
+
+<h2>Permissions the app asks for</h2>
+<div class="scroll">
+<table>
+  <thead><tr><th scope="col">Permission</th><th scope="col">Why</th></tr></thead>
+  <tbody>
+    <tr><td>VPN (<code>VpnService</code>)</td><td>To block the apps you have not allowed. This is
+    the core of the app.</td></tr>
+    <tr><td>List of installed apps</td><td>So that every app and system component has a switch.
+    Used on the phone only.</td></tr>
+    <tr><td>Notifications</td><td>To show that protection is on, to tell you when a new app has been
+    blocked, and to tell you if Android turns NetPermit off.</td></tr>
+    <tr><td>Run at startup</td><td>So protection comes back after a restart, if you had it on.</td></tr>
+    <tr><td>Usage Access (optional)</td><td>To show how long you used each app. You grant it in
+    Android's settings and can leave it off.</td></tr>
+    <tr><td>Internet and network state</td><td>Needed to run a VPN interface and to notice when
+    your connection changes between Wi-Fi and mobile data. The app does not contact any
+    server.</td></tr>
+    <tr><td>Foreground service</td><td>The firewall runs as a service with a permanent notification
+    for as long as protection is on, so Android does not stop it.</td></tr>
+    <tr><td>Advanced Protection status</td><td>On Android 16 and later, to show on the Security page
+    whether Android's Advanced Protection is switched on.</td></tr>
+    <tr><td>Google Play billing</td><td>To buy a plan through Google Play, if you choose to.</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h2>This website</h2>
+<p>These pages use no cookies, no analytics and no scripts. They are hosted by GitHub Pages; like
+any web host, GitHub receives your IP address when your browser loads a page, under
+<a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement">GitHub's
+privacy statement</a>. We do not receive that information.</p>
+
+<h2>Children</h2>
+<p>NetPermit is a general tool and is not directed at children. It collects nothing from anyone.</p>
+
+<h2>Your choices</h2>
+<p>You can delete the blocked-activity record, switch its recording off, pause or turn off
+protection, and remove everything by uninstalling the app. Because we hold no data about you, there
+is nothing for us to delete or send you on request.</p>
+
+<h2>Changes</h2>
+<p>If this policy changes, the new version will be published at this address with a new effective
+date.</p>
+
+<h2>Contact</h2>
+<p>NetPermit: <a href="mailto:netpermit@gmail.com">netpermit@gmail.com</a></p>
+  </div>
+</main>
+<footer class="site">
+  <div class="wrap">
+    <ul>
+        <li><a href="how-to.html">How to use it</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="privacy.html">Privacy</a></li>
+        <li><a href="terms.html">Terms and payments</a></li>
+        <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <p>NetPermit is an Android app. Questions: <a href="mailto:netpermit@gmail.com">netpermit@gmail.com</a></p>
+    <p>This site uses no cookies, no analytics and no scripts.</p>
+  </div>
+</footer>
+</body>
+</html>
