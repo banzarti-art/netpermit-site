@@ -69,6 +69,8 @@ p, li { max-width: 68ch; }
 .pill { display: inline-block; background: var(--mint); color: #0B2420; font-weight: 600; font-size: 14px; padding: 5px 12px; border-radius: 999px; }
 @media (prefers-color-scheme: dark) { .pill { color: #D4F5E7; } }
 
+.gallery { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); margin: 6px 0 30px; }
+.gallery img { width: 100%; height: auto; display: block; border-radius: 22px; border: 1px solid var(--line); }
 .cards { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); margin: 16px 0; padding: 0; list-style: none; }
 .card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px 20px; }
 .card h3 { margin-top: 0; }
