@@ -1,0 +1,30 @@
+{
+  "name": "NetPermit codes",
+  "short_name": "NetPermit codes",
+  "description": "Make NetPermit gift codes.",
+  "start_url": "maker.html",
+  "scope": "maker.html",
+  "display": "standalone",
+  "background_color": "#102F2B",
+  "theme_color": "#102F2B",
+  "icons": [
+    {
+      "src": "assets/maker-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/maker-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/maker-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

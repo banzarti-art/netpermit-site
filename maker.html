@@ -1,0 +1,903 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src &#x27;none&#x27;; script-src &#x27;sha256-GLYe/umu+Dq6YQJfRHI3Vk+N8o8LIUvZtHbUG9GZtVg=&#x27;; style-src &#x27;sha256-mHw/qOgCgdsAS/ls1msLHXJ1hb9D1Woi3QbH+0jNzZs=&#x27;; img-src &#x27;self&#x27; blob: data:; manifest-src &#x27;self&#x27;; base-uri &#x27;none&#x27;; form-action &#x27;none&#x27;">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>NetPermit codes</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#102F2B">
+<meta name="netpermit-site" content="https://banzarti-art.github.io/netpermit-site">
+<meta name="netpermit-keys" content="Ztsyy2N8AfqidL5e3GGQ3oBxYRWIVwTB1uAmsmQ8Aka9BCwVXnzGLWCpLAvKIbF0lum7YuUuoHyuOxRVBinRBA">
+<link rel="manifest" href="maker.webmanifest">
+<link rel="icon" href="assets/maker-192.png" type="image/png">
+<link rel="apple-touch-icon" href="assets/maker-192.png">
+<style>
+:root { --bg:#f4f7f5; --card:#ffffff; --ink:#10201c; --soft:#52655f; --line:#d5dfdb; --accent:#176b55; --accent-ink:#ffffff; --pick:#dff3ea; --bad:#b3261e; }
+@media (prefers-color-scheme: dark) {
+  :root { --bg:#0c1513; --card:#14211e; --ink:#e9f2ee; --soft:#9db1aa; --line:#27403a; --accent:#7fd9b8; --accent-ink:#06231b; --pick:#1d3a32; --bad:#ffb4ab; }
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 17px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+main { max-width: 560px; margin: 0 auto; padding: calc(18px + env(safe-area-inset-top)) 16px calc(48px + env(safe-area-inset-bottom)); }
+.top { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+h1 { font-size: 24px; margin: 0; display: flex; align-items: center; gap: 10px; }
+h1 img { border-radius: 9px; }
+h2 { font-size: 19px; margin: 0 0 10px; }
+p, ol { margin: 0 0 10px; }
+ol { padding-left: 22px; }
+li { margin-bottom: 6px; }
+.soft { color: var(--soft); font-size: 15px; }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 18px; margin-top: 16px; }
+.row { display: flex; flex-wrap: wrap; gap: 10px; }
+.gap { margin-top: 20px; }
+button, a.button { font: inherit; border-radius: 12px; border: 1px solid var(--line); background: var(--card); color: var(--ink); padding: 12px 16px; min-height: 48px; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; text-align: center; }
+button.pick[aria-pressed="true"] { background: var(--pick); border-color: var(--accent); font-weight: 600; }
+button.go, button.make { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); font-weight: 650; }
+button.make { flex: 1 1 calc(50% - 5px); flex-direction: column; font-size: 18px; padding: 14px 10px; }
+button.make small { font-weight: 400; font-size: 13px; opacity: .85; }
+button.link { border: 0; background: none; color: var(--accent); padding: 6px 0; min-height: 0; font-weight: 600; text-align: left; }
+button.danger { color: var(--bad); }
+button:disabled { opacity: .5; cursor: default; }
+label { display: block; font-weight: 600; margin: 14px 0 6px; }
+input { font: inherit; width: 100%; padding: 12px; border-radius: 10px; border: 1px solid var(--line); background: var(--bg); color: var(--ink); }
+input.code { letter-spacing: .08em; text-transform: uppercase; }
+details { margin-top: 14px; }
+summary { cursor: pointer; color: var(--accent); font-weight: 600; padding: 6px 0; }
+.qr { background: #ffffff; border-radius: 12px; padding: 4px; margin: 4px auto 14px; max-width: 320px; }
+.qr canvas { display: block; width: 100%; height: auto; image-rendering: pixelated; }
+.mono { font: 13px/1.5 ui-monospace, "SF Mono", Menlo, Consolas, monospace; word-break: break-all; background: var(--bg); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; margin: 6px 0 12px; -webkit-user-select: all; user-select: all; }
+.problem { color: var(--bad); font-weight: 600; margin: 12px 0 0; min-height: 1.5em; }
+.said { color: var(--accent); font-weight: 600; min-height: 1.5em; margin: 8px 0 0; }
+ul.made { list-style: none; margin: 0; padding: 0; }
+ul.made li { border-top: 1px solid var(--line); padding: 10px 0; margin: 0; }
+ul.made li:first-child { border-top: 0; }
+[hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<main>
+  <div class="top">
+    <h1><img src="assets/maker-192.png" alt="" width="34" height="34">NetPermit codes</h1>
+    <button id="lock" type="button" hidden>Lock</button>
+  </div>
+
+  <noscript><div class="card"><h2>This page needs JavaScript</h2><p>Switch it on in your browser's settings and open the page again.</p></div></noscript>
+
+  <section class="card" id="unsupported" hidden>
+    <h2>This browser cannot run the code maker</h2>
+    <p>Open this page in Chrome or Samsung Internet, in a normal tab (not a private one), at its https address.</p>
+  </section>
+
+  <section class="card" id="closed" hidden>
+    <h2>Not set up on this phone</h2>
+    <p class="problem" id="closed-note" hidden></p>
+    <p>This page makes NetPermit gift codes. It belongs to NetPermit's owner, and it does nothing until it has been set up from the owner's Mac.</p>
+    <ol>
+      <li>On the Mac, open the <strong>codes</strong> folder and double-click <strong>Open the code maker</strong>.</li>
+      <li>At the bottom of the page that opens, click <strong>Set up my phone</strong>.</li>
+      <li>Point this phone's camera at the picture that appears, and open the link.</li>
+    </ol>
+  </section>
+
+  <section class="card" id="setup" hidden>
+    <h2>Set up this phone</h2>
+    <p class="problem" id="replacing" hidden>This phone already holds the key. Setting it up again replaces it.</p>
+    <label for="setup-code">Setup code, shown on your Mac next to the picture</label>
+    <input class="code" id="setup-code" type="text" autocomplete="off" autocapitalize="characters" autocorrect="off" spellcheck="false" maxlength="24" placeholder="XXXX-XXXX-XXXX">
+    <label for="new-pin">Choose a PIN for this page</label>
+    <input id="new-pin" type="password" inputmode="numeric" autocomplete="off" maxlength="64">
+    <label for="new-pin-again">The same PIN again</label>
+    <input id="new-pin-again" type="password" inputmode="numeric" autocomplete="off" maxlength="64">
+    <p class="soft gap">Six digits or more; longer is safer. You type it each time you open this page. Nobody can recover it: if you forget it, set the phone up again from your Mac.</p>
+    <p><button class="link" id="letters" type="button">Use letters as well as digits</button></p>
+    <div class="row">
+      <button class="go" id="do-setup" type="button">Set up</button>
+      <button id="skip-setup" type="button">Not now</button>
+    </div>
+    <p class="problem" id="setup-problem" role="alert"></p>
+  </section>
+
+  <section class="card" id="locked" hidden>
+    <h2>Enter your PIN</h2>
+    <label for="pin">PIN</label>
+    <input id="pin" type="password" inputmode="numeric" autocomplete="off" enterkeyhint="go" maxlength="64">
+    <div class="row gap"><button class="go" id="unlock" type="button">Unlock</button></div>
+    <p class="problem" id="pin-problem" role="alert"></p>
+    <details>
+      <summary>Forgotten the PIN?</summary>
+      <p class="soft">It cannot be recovered. Remove the key from this phone, then set the phone up again from your Mac with a new PIN. Do the same if you have replaced the signing key on your Mac.</p>
+      <button class="danger" id="forget-locked" type="button">Remove the key from this phone</button>
+    </details>
+  </section>
+
+  <section id="open" hidden>
+    <div class="card" id="hint" hidden>
+      <h2>Keep this page on your home screen</h2>
+      <p>Open your browser's menu and choose <strong>Add to Home screen</strong> (in Samsung Internet: <strong>Add page to</strong>, then <strong>Home screen</strong>). It then opens like an app. Use the same browser you set it up in.</p>
+      <button id="hint-done" type="button">Got it</button>
+    </div>
+
+    <div class="card">
+      <h2>1. Which plan?</h2>
+      <div class="row" id="plans">
+        <button class="pick" type="button" data-plan="pro" aria-pressed="true">Pro (everything)</button>
+        <button class="pick" type="button" data-plan="plus" aria-pressed="false">Plus</button>
+      </div>
+      <h2 class="gap">2. Tap how long it should last</h2>
+      <div class="row">
+        <button class="make" type="button" data-days="7">7 days<small>a taste</small></button>
+        <button class="make" type="button" data-days="30">30 days<small>time to really use it</small></button>
+        <button class="make" type="button" data-days="365">1 year<small>a thank-you</small></button>
+        <button class="make" type="button" data-days="0">For good<small>a permanent gift</small></button>
+      </div>
+      <p class="soft gap">The time starts when the person uses the code, not when you make it.</p>
+      <details>
+        <summary>Options</summary>
+        <label>If nobody uses the code, it stops working after</label>
+        <div class="row" id="within">
+          <button class="pick" type="button" data-within="3" aria-pressed="false">3 days</button>
+          <button class="pick" type="button" data-within="14" aria-pressed="true">14 days</button>
+          <button class="pick" type="button" data-within="60" aria-pressed="false">60 days</button>
+        </div>
+        <label for="phone">Make it work on one phone only (optional)</label>
+        <input class="code" id="phone" type="text" autocomplete="off" autocapitalize="characters" autocorrect="off" spellcheck="false" maxlength="12" placeholder="That phone's code, like K7QF-2M9X">
+        <p class="soft">The person finds it in NetPermit: the gear, Plans, under "Have a code?". Leave it empty for a code that works on any phone. For a permanent gift, one phone only is the safe choice.</p>
+        <label for="note">Who is it for? (a note for your own list)</label>
+        <input id="note" type="text" autocomplete="off" maxlength="120" placeholder="For example: Sara, launch promoter">
+      </details>
+      <p class="problem" id="problem" role="alert"></p>
+    </div>
+
+    <div class="card" id="result" hidden>
+      <h2 id="what"></h2>
+      <p class="soft" id="terms"></p>
+      <div class="qr"><canvas id="qr" width="8" height="8" role="img" aria-label="QR picture of the link"></canvas></div>
+      <p><strong>Send the link or show the picture.</strong> The person taps the link, or points their phone's camera at the picture, and NetPermit opens with the code filled in.</p>
+      <div class="row">
+        <button class="go" id="send" type="button">Send the link</button>
+        <button id="send-picture" type="button">Send the picture</button>
+        <button id="copy-link" type="button">Copy the link</button>
+        <button id="copy-code" type="button">Copy the code</button>
+        <a class="button" id="save" download="netpermit-code.png" hidden>Save the picture</a>
+      </div>
+      <p class="said" id="said" role="status"></p>
+      <label>Link</label>
+      <div class="mono" id="link"></div>
+      <label>Code (they can also paste this under "Have a code?")</label>
+      <div class="mono" id="code"></div>
+      <p class="soft">This page does not keep the code. If you need it again, make a new one.</p>
+    </div>
+
+    <div class="card">
+      <h2>Codes made on this phone</h2>
+      <p class="soft" id="none">None yet.</p>
+      <ul class="made" id="list"></ul>
+      <button class="link" id="clear-list" type="button" hidden>Clear this list</button>
+    </div>
+
+    <div class="card">
+      <h2>This phone</h2>
+      <p class="soft">The key that signs codes is kept on this phone, locked with your PIN. The page locks itself two minutes after you leave it. If this phone is lost or sold, replace the signing key on your Mac.</p>
+      <button class="danger" id="forget" type="button">Remove the key from this phone</button>
+      <div id="forget-sure" hidden>
+        <p class="problem">This removes the key and the list from this phone. You can set it up again from your Mac.</p>
+        <div class="row">
+          <button class="danger" id="forget-yes" type="button">Remove it</button>
+          <button id="forget-no" type="button">Keep it</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+<script>
+/* core:begin */
+// Everything that makes a code, with nothing of the page in it, so that it can be run and checked
+// outside a browser (validation/test_phone_maker.py). The formats are core:model GiftCodes and
+// tools/gift_codes.py; the three must agree.
+const core = (() => {
+  'use strict';
+  const ALPHABET = '0123456789ABCDEFGHJKMNPQRSTVWXYZ';
+  const FIRST_DAY = 20454; // 2026-01-01, as days since 1970-01-01
+  const PLANS = { plus: 1, pro: 2 };
+  const DOMAIN = 'netpermit-gift-code-v1:';
+  const SETUP_SECRET = 'netpermit-maker-setup-v1:';
+  const PIN_SECRET = 'netpermit-maker-pin-v1:';
+  const PIN_ITERATIONS = 2000000;
+  const EC = { name: 'ECDSA', namedCurve: 'P-256' };
+  const SIGN = { name: 'ECDSA', hash: 'SHA-256' };
+  const utf8 = (text) => new TextEncoder().encode(text);
+
+  function b32encode(bytes) {
+    let out = '', held = 0, bits = 0;
+    for (const byte of bytes) {
+      held = (held << 8) | byte;
+      bits += 8;
+      while (bits >= 5) { out += ALPHABET[(held >>> (bits - 5)) & 31]; bits -= 5; }
+      held &= (1 << bits) - 1;
+    }
+    if (bits > 0) out += ALPHABET[(held << (5 - bits)) & 31];
+    return out;
+  }
+
+  function b32decode(text) {
+    const out = [];
+    let held = 0, bits = 0;
+    for (let character of text) {
+      character = character === 'O' ? '0' : (character === 'I' || character === 'L') ? '1' : character;
+      const value = ALPHABET.indexOf(character);
+      if (value < 0) return null;
+      held = (held << 5) | value;
+      bits += 5;
+      if (bits >= 8) { out.push((held >>> (bits - 8)) & 255); bits -= 8; held &= (1 << bits) - 1; }
+    }
+    return Uint8Array.from(out);
+  }
+
+  const normalise = (text) => text.toUpperCase().replace(/[^A-Z0-9]/g, '');
+  const setupCode = (text) => normalise(text).replace(/O/g, '0').replace(/[IL]/g, '1');
+
+  function phoneBytes(text) {
+    const tidy = normalise(text);
+    if (tidy.length !== 8) return null;
+    const bytes = b32decode(tidy);
+    return bytes && bytes.length === 5 ? bytes : null;
+  }
+
+  function phoneText(bytes) {
+    const text = b32encode(bytes);
+    return text.slice(0, 4) + '-' + text.slice(4);
+  }
+
+  function b64u(bytes) {
+    let text = '';
+    for (const byte of bytes) text += String.fromCharCode(byte);
+    return btoa(text).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+  }
+
+  function unb64u(text) {
+    if (typeof text !== 'string' || !/^[A-Za-z0-9_-]+$/.test(text)) return null;
+    try {
+      const raw = atob(text.replace(/-/g, '+').replace(/_/g, '/'));
+      return Uint8Array.from(raw, (character) => character.charCodeAt(0));
+    } catch (unreadable) {
+      return null;
+    }
+  }
+
+  const hex = (bytes) => Array.from(bytes, (byte) => byte.toString(16).padStart(2, '0')).join('');
+
+  // The local calendar day, as tools/gift_codes.py counts it.
+  const epochDay = (date) => Math.floor(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()) / 86400000);
+  const dayText = (day) => new Date(day * 86400000).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
+
+  // ---- the key, locked ----------------------------------------------------------------------
+  // A locked key is 53 bytes: a version (1), sixteen bytes of salt, the number of PBKDF2 rounds,
+  // and the key's secret number with a pad laid over it. The pad comes from a secret someone
+  // types, the salt and the rounds. Nothing here says whether a secret is right: that is found by
+  // seeing whether the number that comes out signs for a key the app accepts.
+  function parseLocked(bytes) {
+    if (!bytes || bytes.length !== 53 || bytes[0] !== 1) return null;
+    const rounds = ((bytes[17] << 24) | (bytes[18] << 16) | (bytes[19] << 8) | bytes[20]) >>> 0;
+    if (rounds < 1000 || rounds > 20000000) return null;
+    return { salt: bytes.slice(1, 17), rounds, covered: bytes.slice(21, 53) };
+  }
+
+  async function pad(secret, salt, rounds) {
+    const material = await crypto.subtle.importKey('raw', utf8(secret), 'PBKDF2', false, ['deriveBits']);
+    return new Uint8Array(await crypto.subtle.deriveBits({ name: 'PBKDF2', hash: 'SHA-256', salt, iterations: rounds }, material, 256));
+  }
+
+  async function unlock(locked, secret) {
+    const cover = await pad(secret, locked.salt, locked.rounds);
+    const number = new Uint8Array(32);
+    for (let i = 0; i < 32; i++) number[i] = locked.covered[i] ^ cover[i];
+    cover.fill(0);
+    return number;
+  }
+
+  async function lock(number, secret, rounds) {
+    const salt = crypto.getRandomValues(new Uint8Array(16));
+    const cover = await pad(secret, salt, rounds);
+    const out = new Uint8Array(53);
+    out[0] = 1;
+    out.set(salt, 1);
+    out[17] = rounds >>> 24; out[18] = (rounds >>> 16) & 255; out[19] = (rounds >>> 8) & 255; out[20] = rounds & 255;
+    for (let i = 0; i < 32; i++) out[21 + i] = number[i] ^ cover[i];
+    cover.fill(0);
+    return out;
+  }
+
+  // PKCS#8 for a P-256 key: this, the secret number, PKCS8_MIDDLE, then the public point.
+  const PKCS8_START = Uint8Array.from([0x30, 0x81, 0x87, 0x02, 0x01, 0x00, 0x30, 0x13, 0x06, 0x07, 0x2a, 0x86, 0x48, 0xce, 0x3d, 0x02, 0x01,
+    0x06, 0x08, 0x2a, 0x86, 0x48, 0xce, 0x3d, 0x03, 0x01, 0x07, 0x04, 0x6d, 0x30, 0x6b, 0x02, 0x01, 0x01, 0x04, 0x20]);
+  const PKCS8_MIDDLE = Uint8Array.from([0xa1, 0x44, 0x03, 0x42, 0x00, 0x04]);
+
+  // The signing key for [number], if it belongs to one of the public keys the app accepts
+  // ([points]: 64 bytes each). A wrong PIN gives a number that belongs to none of them.
+  async function keysFor(number, points) {
+    for (const point of points) {
+      const der = new Uint8Array(138);
+      der.set(PKCS8_START, 0);
+      der.set(number, 36);
+      der.set(PKCS8_MIDDLE, 68);
+      der.set(point, 74);
+      try {
+        const signer = await crypto.subtle.importKey('pkcs8', der, EC, false, ['sign']);
+        const open = new Uint8Array(65);
+        open[0] = 4;
+        open.set(point, 1);
+        const verifier = await crypto.subtle.importKey('raw', open, EC, false, ['verify']);
+        const probe = crypto.getRandomValues(new Uint8Array(32));
+        const signature = await crypto.subtle.sign(SIGN, signer, probe);
+        if (await crypto.subtle.verify(SIGN, verifier, signature, probe)) return { signer, verifier };
+      } catch (notThisOne) {
+        // Not this key, or not the right secret.
+      } finally {
+        der.fill(0);
+      }
+    }
+    return null;
+  }
+
+  // ---- a code -------------------------------------------------------------------------------
+  // wanted: { plan: 'pro' | 'plus', days: 0 for good, lastDay: epoch day, phone: 5 bytes or null }
+  async function compose(keys, wanted) {
+    const last = wanted.lastDay - FIRST_DAY;
+    const whole = (value) => Number.isInteger(value) && value >= 0 && value <= 0xFFFF;
+    if (!(wanted.plan in PLANS) || !whole(wanted.days) || !whole(last)) throw new Error('outside what a code can hold');
+    const payload = new Uint8Array(16);
+    payload[0] = PLANS[wanted.plan];
+    payload[1] = wanted.days >>> 8; payload[2] = wanted.days & 255;
+    payload[3] = last >>> 8; payload[4] = last & 255;
+    payload.set(crypto.getRandomValues(new Uint8Array(6)), 5);
+    if (wanted.phone) payload.set(wanted.phone, 11);
+    const prefix = utf8(DOMAIN);
+    const message = new Uint8Array(prefix.length + payload.length);
+    message.set(prefix, 0);
+    message.set(payload, prefix.length);
+    const signature = new Uint8Array(await crypto.subtle.sign(SIGN, keys.signer, message));
+    if (signature.length !== 64 || !(await crypto.subtle.verify(SIGN, keys.verifier, signature, message))) throw new Error('the code did not check');
+    const body = new Uint8Array(80);
+    body.set(payload, 0);
+    body.set(signature, 16);
+    const text = b32encode(body);
+    return { code: 'NP1-' + text.match(/.{1,5}/g).join('-'), compact: 'NP1' + text, serial: hex(payload.slice(5, 11)) };
+  }
+
+  // ---- a QR picture -------------------------------------------------------------------------
+  // Text to a QR code: bytes, error correction level M, versions 1 to 20, as ISO/IEC 18004 lays
+  // it out. Returns { size, dark } where dark[y * size + x] is 1 for a dark square.
+  const QR_EC = [0, 10, 16, 26, 18, 24, 16, 18, 22, 22, 26, 30, 22, 22, 24, 24, 28, 28, 26, 26, 26];
+  const QR_BLOCKS = [0, 1, 1, 1, 2, 2, 4, 4, 4, 5, 5, 5, 8, 9, 9, 10, 10, 11, 13, 14, 16];
+
+  function qrSquares(version) {
+    let count = (16 * version + 128) * version + 64;
+    if (version >= 2) {
+      const marks = Math.floor(version / 7) + 2;
+      count -= (25 * marks - 10) * marks - 55;
+      if (version >= 7) count -= 36;
+    }
+    return count;
+  }
+
+  function gfTimes(x, y) {
+    let z = 0;
+    for (let i = 7; i >= 0; i--) {
+      z = (z << 1) ^ ((z >>> 7) * 0x11D);
+      z ^= ((y >>> i) & 1) * x;
+    }
+    return z;
+  }
+
+  function rsDivisor(degree) {
+    const out = new Uint8Array(degree);
+    out[degree - 1] = 1;
+    let root = 1;
+    for (let i = 0; i < degree; i++) {
+      for (let j = 0; j < degree; j++) {
+        out[j] = gfTimes(out[j], root);
+        if (j + 1 < degree) out[j] ^= out[j + 1];
+      }
+      root = gfTimes(root, 2);
+    }
+    return out;
+  }
+
+  function rsRemainder(data, divisor) {
+    const out = new Uint8Array(divisor.length);
+    for (const byte of data) {
+      const factor = byte ^ out[0];
+      out.copyWithin(0, 1);
+      out[out.length - 1] = 0;
+      for (let i = 0; i < divisor.length; i++) out[i] ^= gfTimes(divisor[i], factor);
+    }
+    return out;
+  }
+
+  const QR_MASKS = [
+    (x, y) => (x + y) % 2 === 0,
+    (x, y) => y % 2 === 0,
+    (x, y) => x % 3 === 0,
+    (x, y) => (x + y) % 3 === 0,
+    (x, y) => (Math.floor(x / 3) + Math.floor(y / 2)) % 2 === 0,
+    (x, y) => (x * y) % 2 + (x * y) % 3 === 0,
+    (x, y) => ((x * y) % 2 + (x * y) % 3) % 2 === 0,
+    (x, y) => ((x + y) % 2 + (x * y) % 3) % 2 === 0,
+  ];
+
+  function qr(text, forcedMask) {
+    const data = utf8(text);
+    let version = 1, room = 0;
+    for (; version <= 20; version++) {
+      room = Math.floor(qrSquares(version) / 8) - QR_EC[version] * QR_BLOCKS[version];
+      if (4 + (version < 10 ? 8 : 16) + data.length * 8 <= room * 8) break;
+    }
+    if (version > 20) throw new Error('too long for a QR picture');
+
+    // The message: "bytes follow", how many, the bytes, an end mark, then filler to the brim.
+    const bits = [];
+    const put = (value, count) => { for (let i = count - 1; i >= 0; i--) bits.push((value >>> i) & 1); };
+    put(4, 4);
+    put(data.length, version < 10 ? 8 : 16);
+    for (const byte of data) put(byte, 8);
+    put(0, Math.min(4, room * 8 - bits.length));
+    put(0, (8 - bits.length % 8) % 8);
+    for (let filler = 0xEC; bits.length < room * 8; filler ^= 0xEC ^ 0x11) put(filler, 8);
+    const words = new Uint8Array(room);
+    bits.forEach((bit, i) => { words[i >>> 3] |= bit << (7 - (i & 7)); });
+
+    // Cut into blocks, each with its own correction bytes, and deal them out in turn.
+    const blocks = QR_BLOCKS[version], extra = QR_EC[version];
+    const total = Math.floor(qrSquares(version) / 8);
+    const shortBlocks = blocks - total % blocks, shortLength = Math.floor(total / blocks) - extra;
+    const divisor = rsDivisor(extra);
+    const parts = [];
+    for (let i = 0, at = 0; i < blocks; i++) {
+      const length = shortLength + (i < shortBlocks ? 0 : 1);
+      const piece = words.subarray(at, at + length);
+      at += length;
+      parts.push({ data: piece, check: rsRemainder(piece, divisor) });
+    }
+    const stream = [];
+    for (let i = 0; i <= shortLength; i++) for (const part of parts) if (i < part.data.length) stream.push(part.data[i]);
+    for (let i = 0; i < extra; i++) for (const part of parts) stream.push(part.check[i]);
+
+    // The fixed parts of the picture.
+    const size = version * 4 + 17;
+    const dark = new Uint8Array(size * size), fixed = new Uint8Array(size * size);
+    const set = (x, y, on) => { dark[y * size + x] = on ? 1 : 0; fixed[y * size + x] = 1; };
+    for (let i = 0; i < size; i++) { set(6, i, i % 2 === 0); set(i, 6, i % 2 === 0); }
+    for (const [cx, cy] of [[3, 3], [size - 4, 3], [3, size - 4]]) {
+      for (let dy = -4; dy <= 4; dy++) for (let dx = -4; dx <= 4; dx++) {
+        const x = cx + dx, y = cy + dy, ring = Math.max(Math.abs(dx), Math.abs(dy));
+        if (x >= 0 && x < size && y >= 0 && y < size) set(x, y, ring !== 2 && ring !== 4);
+      }
+    }
+    const marks = [];
+    if (version > 1) {
+      const count = Math.floor(version / 7) + 2;
+      const step = Math.ceil((version * 4 + 4) / (count * 2 - 2)) * 2;
+      marks.push(6);
+      for (let at = version * 4 + 10; marks.length < count; at -= step) marks.splice(1, 0, at);
+    }
+    for (let i = 0; i < marks.length; i++) for (let j = 0; j < marks.length; j++) {
+      if ((i === 0 && j === 0) || (i === 0 && j === marks.length - 1) || (i === marks.length - 1 && j === 0)) continue;
+      for (let dy = -2; dy <= 2; dy++) for (let dx = -2; dx <= 2; dx++) set(marks[i] + dx, marks[j] + dy, Math.max(Math.abs(dx), Math.abs(dy)) !== 1);
+    }
+    const format = (mask) => {
+      let rest = mask; // level M is 00, so the five bits are the mask's number
+      for (let i = 0; i < 10; i++) rest = (rest << 1) ^ ((rest >>> 9) * 0x537);
+      const word = ((mask << 10) | rest) ^ 0x5412;
+      const bit = (i) => ((word >>> i) & 1) === 1;
+      for (let i = 0; i <= 5; i++) set(8, i, bit(i));
+      set(8, 7, bit(6)); set(8, 8, bit(7)); set(7, 8, bit(8));
+      for (let i = 9; i < 15; i++) set(14 - i, 8, bit(i));
+      for (let i = 0; i < 8; i++) set(size - 1 - i, 8, bit(i));
+      for (let i = 8; i < 15; i++) set(8, size - 15 + i, bit(i));
+      set(8, size - 8, true);
+    };
+    format(0);
+    if (version >= 7) {
+      let rest = version;
+      for (let i = 0; i < 12; i++) rest = (rest << 1) ^ ((rest >>> 11) * 0x1F25);
+      const word = (version << 12) | rest;
+      for (let i = 0; i < 18; i++) {
+        const on = ((word >>> i) & 1) === 1, a = size - 11 + i % 3, b = Math.floor(i / 3);
+        set(a, b, on);
+        set(b, a, on);
+      }
+    }
+
+    // The message, snaking up and down from the bottom right.
+    let at = 0;
+    for (let right = size - 1; right >= 1; right -= 2) {
+      if (right === 6) right = 5;
+      for (let step = 0; step < size; step++) for (let j = 0; j < 2; j++) {
+        const x = right - j, y = ((right + 1) & 2) === 0 ? size - 1 - step : step;
+        if (!fixed[y * size + x] && at < stream.length * 8) {
+          dark[y * size + x] = (stream[at >>> 3] >>> (7 - (at & 7))) & 1;
+          at++;
+        }
+      }
+    }
+
+    // A mask breaks up patterns a reader would stumble on. Try all eight and keep the calmest.
+    const flip = (mask) => {
+      for (let y = 0; y < size; y++) for (let x = 0; x < size; x++) if (!fixed[y * size + x] && QR_MASKS[mask](x, y)) dark[y * size + x] ^= 1;
+    };
+    const penalty = () => {
+      let score = 0;
+      const line = new Uint8Array(size);
+      const lines = (get) => {
+        for (let a = 0; a < size; a++) {
+          for (let b = 0; b < size; b++) line[b] = get(a, b);
+          let run = 1;
+          for (let b = 1; b <= size; b++) {
+            if (b < size && line[b] === line[b - 1]) run++;
+            else { if (run >= 5) score += run - 2; run = 1; }
+          }
+          for (let b = 0; b + 11 <= size; b++) {
+            const s = (i) => line[b + i];
+            if (s(0) && !s(1) && s(2) && s(3) && s(4) && !s(5) && s(6) && !s(7) && !s(8) && !s(9) && !s(10)) score += 40;
+            if (!s(0) && !s(1) && !s(2) && !s(3) && s(4) && !s(5) && s(6) && s(7) && s(8) && !s(9) && s(10)) score += 40;
+          }
+        }
+      };
+      lines((a, b) => dark[a * size + b]);
+      lines((a, b) => dark[b * size + a]);
+      for (let y = 0; y < size - 1; y++) for (let x = 0; x < size - 1; x++) {
+        const corner = dark[y * size + x];
+        if (corner === dark[y * size + x + 1] && corner === dark[(y + 1) * size + x] && corner === dark[(y + 1) * size + x + 1]) score += 3;
+      }
+      let count = 0;
+      for (const square of dark) count += square;
+      score += Math.max(0, Math.ceil(Math.abs(count * 20 - size * size * 10) / (size * size)) - 1) * 10;
+      return score;
+    };
+    let best = 0;
+    if (forcedMask === undefined) {
+      let least = Infinity;
+      for (let mask = 0; mask < 8; mask++) {
+        flip(mask);
+        format(mask);
+        const score = penalty();
+        if (score < least) { least = score; best = mask; }
+        flip(mask);
+      }
+    } else {
+      best = forcedMask;
+    }
+    flip(best);
+    format(best);
+    return { size, version, mask: best, dark };
+  }
+
+  return { FIRST_DAY, SETUP_SECRET, PIN_SECRET, PIN_ITERATIONS, b32encode, b32decode, normalise, setupCode, phoneBytes, phoneText,
+    b64u, unb64u, hex, epochDay, dayText, parseLocked, unlock, lock, keysFor, compose, qr };
+})();
+/* core:end */
+
+// The page itself.
+(() => {
+  'use strict';
+  const $ = (id) => document.getElementById(id);
+  if (window.top !== window.self) return; // never inside someone else's page
+
+  const STORE = 'netpermit.maker.v1', MADE = 'netpermit.maker.made.v1';
+  const LOCK_AFTER = 120000, MOST_WRONG = 10, MOST_LISTED = 200;
+  const SECTIONS = ['unsupported', 'closed', 'setup', 'locked', 'open'];
+  const LASTS = { 0: 'for good', 7: '7 days', 30: '30 days', 365: '1 year' };
+
+  const meta = (name) => { const tag = document.querySelector('meta[name="' + name + '"]'); return tag ? tag.content : ''; };
+  const site = meta('netpermit-site').replace(/\/+$/, '');
+  const points = meta('netpermit-keys').split(',').map((text) => core.unb64u(text.trim())).filter((point) => point && point.length === 64);
+
+  const read = (name) => { try { return JSON.parse(localStorage.getItem(name) || 'null'); } catch (unreadable) { return null; } };
+  const write = (name, value) => { try { localStorage.setItem(name, JSON.stringify(value)); return true; } catch (refused) { return false; } };
+  const erase = (name) => { try { localStorage.removeItem(name); } catch (refused) { /* nothing to remove */ } };
+  const keeps = () => { try { localStorage.setItem(STORE + '.probe', '1'); localStorage.removeItem(STORE + '.probe'); return true; } catch (refused) { return false; } };
+
+  // The setup picture's link carries the locked key after the #. Take it out of the address at
+  // once, so it is not left in the address bar or in what the browser shows of this page.
+  let offered = null, damaged = false;
+  function takeFromAddress() {
+    const address = location.hash || '';
+    if (address.indexOf('#s=') === 0) {
+      offered = core.parseLocked(core.unb64u(address.slice(3)));
+      damaged = offered === null;
+    }
+    if (address) history.replaceState(null, '', location.pathname + location.search);
+    return address.indexOf('#s=') === 0;
+  }
+  takeFromAddress();
+
+  const usable = window.isSecureContext && window.crypto && crypto.subtle && points.length > 0 && keeps();
+  let keys = null;      // the signing key, while the page is unlocked
+  let hiddenAt = 0;
+  let made = null;      // the code on the screen
+  let saved = '';       // the address of its picture, for "Save the picture"
+  let letters = false;
+  const choice = { plan: 'pro', within: 14 };
+
+  const say = (id, text) => { $(id).textContent = text; };
+  const busy = (on) => { for (const button of document.querySelectorAll('button')) button.disabled = on; };
+
+  function show(name) {
+    for (const id of SECTIONS) $(id).hidden = id !== name;
+    $('lock').hidden = name !== 'open';
+    window.scrollTo(0, 0);
+  }
+
+  function keyboard(withLetters) {
+    letters = withLetters;
+    for (const id of ['new-pin', 'new-pin-again', 'pin']) $(id).setAttribute('inputmode', withLetters ? 'text' : 'numeric');
+    say('letters', withLetters ? 'Use digits only' : 'Use letters as well as digits');
+  }
+
+  function route() {
+    if (!usable) return show('unsupported');
+    if (offered) {
+      $('replacing').hidden = !read(STORE);
+      return show('setup');
+    }
+    if (keys) return openMaker();
+    const record = read(STORE);
+    if (record) {
+      keyboard(record.letters === true);
+      return show('locked');
+    }
+    if (damaged) { say('closed-note', 'That setup link is damaged. Point the camera at the picture on your Mac again.'); $('closed-note').hidden = false; }
+    show('closed');
+  }
+
+  function openMaker() {
+    const record = read(STORE) || {};
+    const standalone = window.matchMedia && window.matchMedia('(display-mode: standalone)').matches;
+    $('hint').hidden = standalone || record.hinted === true;
+    for (const id of ['send', 'send-picture']) $(id).hidden = typeof navigator.share !== 'function';
+    list();
+    show('open');
+  }
+
+  function forget() {
+    keys = null;
+    clearResult();
+    erase(STORE);
+    erase(MADE);
+    $('forget-sure').hidden = true;
+    route();
+  }
+
+  function clearResult() {
+    made = null;
+    if (saved) { URL.revokeObjectURL(saved); saved = ''; }
+    $('result').hidden = true;
+    for (const id of ['what', 'terms', 'link', 'code', 'said', 'problem']) say(id, '');
+    const canvas = $('qr');
+    canvas.width = 8;
+    canvas.height = 8;
+    $('save').hidden = true;
+    $('save').removeAttribute('href');
+  }
+
+  function lockNow() {
+    keys = null;
+    clearResult();
+    $('phone').value = '';
+    $('note').value = '';
+    route();
+  }
+
+  // ---- setting up ---------------------------------------------------------------------------
+  $('letters').addEventListener('click', () => keyboard(!letters));
+  $('skip-setup').addEventListener('click', () => { offered = null; route(); });
+  $('do-setup').addEventListener('click', async () => {
+    const code = core.setupCode($('setup-code').value);
+    const pin = $('new-pin').value;
+    if (code.length !== 12) return say('setup-problem', 'The setup code is twelve letters and digits. It is on your Mac, next to the picture.');
+    if (pin.length < 6) return say('setup-problem', 'Choose a PIN of six digits or more.');
+    if (pin !== $('new-pin-again').value) return say('setup-problem', 'The two PINs are not the same.');
+    say('setup-problem', 'Working…');
+    busy(true);
+    try {
+      const number = await core.unlock(offered, core.SETUP_SECRET + code);
+      const found = await core.keysFor(number, points);
+      if (!found) {
+        number.fill(0);
+        return say('setup-problem', 'That setup code does not open this picture. The code and the picture come as a pair: if you clicked "Set up my phone" again on your Mac, point the camera at the new picture.');
+      }
+      const locked = await core.lock(number, core.PIN_SECRET + pin, core.PIN_ITERATIONS);
+      number.fill(0);
+      if (!write(STORE, { v: 1, key: core.b64u(locked), letters, wrong: 0 })) {
+        return say('setup-problem', 'This browser would not keep the key. Use a normal tab, not a private one.');
+      }
+      keys = found;
+      offered = null;
+      for (const id of ['setup-code', 'new-pin', 'new-pin-again']) $(id).value = '';
+      say('setup-problem', '');
+      route();
+    } catch (failure) {
+      say('setup-problem', 'That did not work. Close this page and point the camera at the picture again.');
+    } finally {
+      busy(false);
+    }
+  });
+
+  // ---- unlocking ----------------------------------------------------------------------------
+  async function unlock() {
+    const record = read(STORE);
+    if (!record) return route();
+    const pin = $('pin').value;
+    if (!pin) return;
+    say('pin-problem', 'Working…');
+    busy(true);
+    try {
+      const locked = core.parseLocked(core.unb64u(record.key));
+      const number = locked ? await core.unlock(locked, core.PIN_SECRET + pin) : null;
+      const found = number ? await core.keysFor(number, points) : null;
+      if (number) number.fill(0);
+      $('pin').value = '';
+      if (!found) {
+        record.wrong = (record.wrong || 0) + 1;
+        if (record.wrong >= MOST_WRONG) {
+          erase(STORE);
+          say('pin-problem', '');
+          say('closed-note', 'Ten wrong PINs in a row: the key has been removed from this phone. Set it up again from your Mac.');
+          $('closed-note').hidden = false;
+          return route();
+        }
+        write(STORE, record);
+        const left = MOST_WRONG - record.wrong;
+        return say('pin-problem', 'That PIN is not right. ' + left + (left === 1 ? ' try' : ' tries') + ' left before this phone forgets the key.');
+      }
+      if (record.wrong) { record.wrong = 0; write(STORE, record); }
+      keys = found;
+      say('pin-problem', '');
+      route();
+    } catch (failure) {
+      say('pin-problem', 'That did not work. Try again.');
+    } finally {
+      busy(false);
+    }
+  }
+  $('unlock').addEventListener('click', unlock);
+  $('pin').addEventListener('keydown', (event) => { if (event.key === 'Enter') unlock(); });
+  $('forget-locked').addEventListener('click', forget);
+
+  // ---- making a code ------------------------------------------------------------------------
+  function pick(group, key, value) {
+    $(group).addEventListener('click', (event) => {
+      const button = event.target.closest('button.pick');
+      if (!button) return;
+      choice[key] = value(button);
+      for (const other of $(group).querySelectorAll('button.pick')) other.setAttribute('aria-pressed', String(other === button));
+    });
+  }
+  pick('plans', 'plan', (button) => button.dataset.plan);
+  pick('within', 'within', (button) => Number(button.dataset.within));
+
+  function paint(canvas, picture, scale) {
+    const quiet = 4, side = (picture.size + quiet * 2) * scale;
+    canvas.width = side;
+    canvas.height = side;
+    const pen = canvas.getContext('2d');
+    pen.fillStyle = '#ffffff';
+    pen.fillRect(0, 0, side, side);
+    pen.fillStyle = '#000000';
+    for (let y = 0; y < picture.size; y++) for (let x = 0; x < picture.size; x++) {
+      if (picture.dark[y * picture.size + x]) pen.fillRect((x + quiet) * scale, (y + quiet) * scale, scale, scale);
+    }
+  }
+
+  function list() {
+    const rows = read(MADE) || [];
+    $('none').hidden = rows.length > 0;
+    $('clear-list').hidden = rows.length === 0;
+    const body = $('list');
+    body.textContent = '';
+    for (const row of rows) {
+      const line = document.createElement('li');
+      const what = document.createElement('strong');
+      what.textContent = row.plan + ', ' + row.lasts + (row.note ? '  ·  ' + row.note : '');
+      const rest = document.createElement('div');
+      rest.className = 'soft';
+      rest.textContent = 'Made ' + row.on + '  ·  use by ' + row.useBy + (row.phone ? '  ·  phone ' + row.phone : '');
+      line.appendChild(what);
+      line.appendChild(rest);
+      body.appendChild(line);
+    }
+  }
+
+  async function make(days) {
+    say('problem', '');
+    if (!keys) return lockNow();
+    let phone = null;
+    const typed = $('phone').value.trim();
+    if (typed) {
+      phone = core.phoneBytes(typed);
+      if (!phone) return say('problem', 'That is not a phone code. It is eight letters and digits, shown in NetPermit on the Plans page under "Have a code?", for example K7QF-2M9X.');
+    }
+    const note = $('note').value.trim().slice(0, 120);
+    const now = new Date();
+    const lastDay = core.epochDay(now) + choice.within;
+    busy(true);
+    try {
+      const code = await core.compose(keys, { plan: choice.plan, days, lastDay, phone });
+      const fresh = {
+        code: code.code, link: site + '/redeem.html#' + code.compact, plan: choice.plan === 'pro' ? 'Pro' : 'Plus',
+        lasts: LASTS[days], useBy: core.dayText(lastDay), phone: phone ? core.phoneText(phone) : '', note,
+      };
+      // The list says what was given to whom. It never holds a code.
+      const rows = read(MADE) || [];
+      rows.unshift({ on: core.dayText(core.epochDay(now)), plan: fresh.plan, lasts: fresh.lasts, useBy: fresh.useBy, phone: fresh.phone, note, serial: code.serial });
+      write(MADE, rows.slice(0, MOST_LISTED));
+      clearResult();
+      made = fresh;
+      say('what', 'NetPermit ' + fresh.plan + ', ' + fresh.lasts + (note ? '  ·  for ' + note : ''));
+      say('terms', 'Works if used by ' + fresh.useBy + (fresh.phone ? ', on the phone ' + fresh.phone + ' only.' : ', on any phone.'));
+      say('link', fresh.link);
+      say('code', fresh.code);
+      paint($('qr'), core.qr(fresh.link), 8);
+      made.picture = await new Promise((resolve) => $('qr').toBlob(resolve, 'image/png'));
+      if (made.picture) {
+        saved = URL.createObjectURL(made.picture);
+        $('save').href = saved;
+        $('save').hidden = false;
+      }
+      $('result').hidden = false;
+      list();
+      $('result').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } catch (failure) {
+      say('problem', 'The code could not be made. Lock the page, unlock it and try again.');
+    } finally {
+      busy(false);
+    }
+  }
+  for (const button of document.querySelectorAll('button.make')) button.addEventListener('click', () => make(Number(button.dataset.days)));
+
+  const words = () => 'A NetPermit ' + made.plan + ' code for you (' + made.lasts + '). Open this link on your Android phone by ' + made.useBy + ':';
+  async function copy(text, what) {
+    try { await navigator.clipboard.writeText(text); say('said', what + ' copied'); }
+    catch (refused) { say('said', 'Press and hold it below, then copy'); }
+  }
+  $('copy-link').addEventListener('click', () => { if (made) copy(made.link, 'Link'); });
+  $('copy-code').addEventListener('click', () => { if (made) copy(made.code, 'Code'); });
+  $('send').addEventListener('click', async () => {
+    if (!made) return;
+    try { await navigator.share({ text: words() + '\n' + made.link }); } catch (closed) { /* the person closed the sheet */ }
+  });
+  $('send-picture').addEventListener('click', async () => {
+    if (!made || !made.picture) return;
+    const file = new File([made.picture], 'netpermit-code.png', { type: 'image/png' });
+    if (!navigator.canShare || !navigator.canShare({ files: [file] })) return say('said', 'This browser cannot send a picture. Use "Save the picture" instead.');
+    try { await navigator.share({ files: [file], text: words() }); } catch (closed) { /* the person closed the sheet */ }
+  });
+  $('clear-list').addEventListener('click', () => { erase(MADE); list(); });
+
+  // ---- locking and forgetting ---------------------------------------------------------------
+  $('lock').addEventListener('click', lockNow);
+  $('hint-done').addEventListener('click', () => {
+    const record = read(STORE);
+    if (record) { record.hinted = true; write(STORE, record); }
+    $('hint').hidden = true;
+  });
+  $('forget').addEventListener('click', () => { $('forget-sure').hidden = false; });
+  $('forget-no').addEventListener('click', () => { $('forget-sure').hidden = true; });
+  $('forget-yes').addEventListener('click', forget);
+  // The link can also arrive while the page is already open: the browser then changes the address
+  // without loading the page again.
+  window.addEventListener('hashchange', () => { if (takeFromAddress()) route(); });
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) hiddenAt = Date.now();
+    else if (keys && hiddenAt && Date.now() - hiddenAt > LOCK_AFTER) lockNow();
+  });
+
+  route();
+})();
+</script>
+</body>
+</html>
