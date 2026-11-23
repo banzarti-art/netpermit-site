@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src &#x27;none&#x27;; script-src &#x27;sha256-GLYe/umu+Dq6YQJfRHI3Vk+N8o8LIUvZtHbUG9GZtVg=&#x27;; style-src &#x27;sha256-mHw/qOgCgdsAS/ls1msLHXJ1hb9D1Woi3QbH+0jNzZs=&#x27;; img-src &#x27;self&#x27; blob: data:; manifest-src &#x27;self&#x27;; base-uri &#x27;none&#x27;; form-action &#x27;none&#x27;">
+<meta http-equiv="Content-Security-Policy" content="default-src &#x27;none&#x27;; script-src &#x27;sha256-nf+OPc48/T/xUnfqYAshhlz05ATJdOyUp+udiI4TQHI=&#x27;; style-src &#x27;sha256-Qq+jYHkqgcq6RdACGlnDqksi6kZC2Gv7r2hBHCYuzGs=&#x27;; img-src &#x27;self&#x27; blob: data:; manifest-src &#x27;self&#x27;; base-uri &#x27;none&#x27;; form-action &#x27;none&#x27;">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>NetPermit codes</title>
 <meta name="robots" content="noindex, nofollow">
@@ -55,6 +55,13 @@ summary { cursor: pointer; color: var(--accent); font-weight: 600; padding: 6px 
 ul.made { list-style: none; margin: 0; padding: 0; }
 ul.made li { border-top: 1px solid var(--line); padding: 10px 0; margin: 0; }
 ul.made li:first-child { border-top: 0; }
+button.pick.two { flex-direction: column; align-items: flex-start; text-align: left; }
+button.pick small { font-weight: 400; font-size: 13px; opacity: .8; }
+.top h2 { margin: 0; }
+dialog { border: 1px solid var(--line); border-radius: 16px; background: var(--card); color: var(--ink); max-width: 520px; width: calc(100% - 32px); padding: 20px; }
+dialog::backdrop { background: rgba(0, 0, 0, .55); }
+dialog ul { margin: 0 0 12px; padding-left: 20px; }
+dialog li { margin-bottom: 10px; }
 [hidden] { display: none !important; }
 </style>
 </head>
@@ -122,12 +129,38 @@ ul.made li:first-child { border-top: 0; }
     </div>
 
     <div class="card">
-      <h2>1. Which plan?</h2>
-      <div class="row" id="plans">
+      <div class="top">
+        <h2>1. Which plan?</h2>
+        <button class="link" id="rules-open" type="button">How codes work</button>
+      </div>
+      <div class="row gap" id="plans">
         <button class="pick" type="button" data-plan="pro" aria-pressed="true">Pro (everything)</button>
         <button class="pick" type="button" data-plan="plus" aria-pressed="false">Plus</button>
       </div>
-      <h2 class="gap">2. Tap how long it should last</h2>
+
+      <h2 class="gap">2. Who can use it?</h2>
+      <div class="row" id="kinds">
+        <button class="pick two" type="button" data-kind="any" aria-pressed="true">Any phone<small>has to be used in time</small></button>
+        <button class="pick two" type="button" data-kind="one" aria-pressed="false">One phone only<small>never expires</small></button>
+      </div>
+      <div id="any-part">
+        <label>If nobody uses it, it stops working after</label>
+        <div class="row" id="within">
+          <button class="pick" type="button" data-within="48h" aria-pressed="true">48 hours</button>
+          <button class="pick" type="button" data-within="14d" aria-pressed="false">14 days</button>
+          <button class="pick" type="button" data-within="60d" aria-pressed="false">60 days</button>
+        </div>
+        <p class="soft gap">Until then it works on every phone it reaches, so shorter is safer.</p>
+      </div>
+      <div id="one-part" hidden>
+        <label for="phone">That phone's code</label>
+        <input class="code" id="phone" type="text" autocomplete="off" autocapitalize="characters" autocorrect="off" spellcheck="false" maxlength="12" placeholder="Like K7QF-2M9X">
+        <p class="soft gap">The person finds it in NetPermit: the gear, Plans, under "Have a code?". The code you make works on that phone and no other, so it cannot be passed on and it never expires.</p>
+      </div>
+      <label for="note">Who is it for? (a note for your own list)</label>
+      <input id="note" type="text" autocomplete="off" maxlength="120" placeholder="For example: Sara, launch promoter">
+
+      <h2 class="gap">3. Tap how long the plan should last</h2>
       <div class="row">
         <button class="make" type="button" data-days="7">7 days<small>a taste</small></button>
         <button class="make" type="button" data-days="30">30 days<small>time to really use it</small></button>
@@ -135,20 +168,6 @@ ul.made li:first-child { border-top: 0; }
         <button class="make" type="button" data-days="0">For good<small>a permanent gift</small></button>
       </div>
       <p class="soft gap">The time starts when the person uses the code, not when you make it.</p>
-      <details>
-        <summary>Options</summary>
-        <label>If nobody uses the code, it stops working after</label>
-        <div class="row" id="within">
-          <button class="pick" type="button" data-within="3" aria-pressed="false">3 days</button>
-          <button class="pick" type="button" data-within="14" aria-pressed="true">14 days</button>
-          <button class="pick" type="button" data-within="60" aria-pressed="false">60 days</button>
-        </div>
-        <label for="phone">Make it work on one phone only (optional)</label>
-        <input class="code" id="phone" type="text" autocomplete="off" autocapitalize="characters" autocorrect="off" spellcheck="false" maxlength="12" placeholder="That phone's code, like K7QF-2M9X">
-        <p class="soft">The person finds it in NetPermit: the gear, Plans, under "Have a code?". Leave it empty for a code that works on any phone. For a permanent gift, one phone only is the safe choice.</p>
-        <label for="note">Who is it for? (a note for your own list)</label>
-        <input id="note" type="text" autocomplete="off" maxlength="120" placeholder="For example: Sara, launch promoter">
-      </details>
       <p class="problem" id="problem" role="alert"></p>
     </div>
 
@@ -192,6 +211,19 @@ ul.made li:first-child { border-top: 0; }
       </div>
     </div>
   </section>
+
+  <dialog id="rules">
+    <h2>How codes work</h2>
+    <ul>
+      <li><strong>One phone only.</strong> Works on that phone and no other, so it cannot be passed on. It never expires. You need that phone's code first: in NetPermit, the gear, Plans, under "Have a code?".</li>
+      <li><strong>Any phone.</strong> Works on every phone it reaches until it stops: after 48 hours, or after 14 or 60 days if you choose that. Send it to one person. Never post it.</li>
+      <li><strong>Once per phone.</strong> A phone accepts a code one time. The 7 days, 30 days or year start when the code is used, not when you make it. If the app is erased and installed again, a code that has not stopped works again on that phone.</li>
+      <li><strong>Sent is sent.</strong> A code cannot be cancelled. For anything valuable, above all a permanent gift, choose One phone only.</li>
+      <li><strong>Gifts, not sales.</strong> Google requires anything sold in the app to go through Google Play.</li>
+    </ul>
+    <p class="soft">Why can a code for any phone not work just once? NetPermit has no server, so nothing can remember that a code was already used on someone else's phone. One phone only is how to get "once".</p>
+    <button id="rules-close" type="button">Close</button>
+  </dialog>
 </main>
 <script>
 /* core:begin */
@@ -207,6 +239,9 @@ const core = (() => {
   const SETUP_SECRET = 'netpermit-maker-setup-v1:';
   const PIN_SECRET = 'netpermit-maker-pin-v1:';
   const PIN_ITERATIONS = 2000000;
+  // How long a new code can wait to be used (the owner's rule; tools/gift_codes.py has the same).
+  const NEVER = FIRST_DAY + 0xFFFF;                     // a code for one phone does not stop
+  const WAITS = { '48h': 48, '14d': 336, '60d': 1440 }; // a code for any phone has to: hours
   const EC = { name: 'ECDSA', namedCurve: 'P-256' };
   const SIGN = { name: 'ECDSA', hash: 'SHA-256' };
   const utf8 = (text) => new TextEncoder().encode(text);
@@ -273,6 +308,21 @@ const core = (() => {
   // The local calendar day, as tools/gift_codes.py counts it.
   const epochDay = (date) => Math.floor(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()) / 86400000);
   const dayText = (day) => new Date(day * 86400000).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
+
+  // The last day a new code can be used. One phone: never stops, it cannot be passed on. Any
+  // phone: it works wherever it lands, so it stops after [hours]. The app compares whole days from
+  // midnight UTC, so the code is good to the end of the day on which those hours run out.
+  const lastDayFor = (onePhone, hours, nowMillis) => onePhone ? NEVER : Math.floor((nowMillis + hours * 3600000) / 86400000);
+
+  // When a code stops being usable, in this phone's own time: the moment the app refuses it.
+  function endsText(lastDay) {
+    if (lastDay >= NEVER) return 'never';
+    const end = new Date((lastDay + 1) * 86400000);
+    return end.toLocaleDateString('en-GB', { weekday: 'long' }) + ' ' + end.getDate() + ' ' + end.toLocaleDateString('en-GB', { month: 'long' }) + ', ' +
+      end.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }).replace(/\s/g, ' ');
+  }
+  const termsText = (ends, phone) => (phone ? 'Works on the phone ' + phone + ' only' : 'Works on any phone') +
+    (ends === 'never' ? '. It does not expire.' : ', until ' + ends + '.');
 
   // ---- the key, locked ----------------------------------------------------------------------
   // A locked key is 53 bytes: a version (1), sixteen bytes of salt, the number of PBKDF2 rounds,
@@ -576,8 +626,8 @@ const core = (() => {
     return { size, version, mask: best, dark };
   }
 
-  return { FIRST_DAY, SETUP_SECRET, PIN_SECRET, PIN_ITERATIONS, b32encode, b32decode, normalise, setupCode, phoneBytes, phoneText,
-    b64u, unb64u, hex, epochDay, dayText, parseLocked, unlock, lock, keysFor, compose, qr };
+  return { FIRST_DAY, NEVER, WAITS, SETUP_SECRET, PIN_SECRET, PIN_ITERATIONS, b32encode, b32decode, normalise, setupCode, phoneBytes, phoneText,
+    b64u, unb64u, hex, epochDay, dayText, lastDayFor, endsText, termsText, parseLocked, unlock, lock, keysFor, compose, qr };
 })();
 /* core:end */
 
@@ -621,7 +671,7 @@ const core = (() => {
   let made = null;      // the code on the screen
   let saved = '';       // the address of its picture, for "Save the picture"
   let letters = false;
-  const choice = { plan: 'pro', within: 14 };
+  const choice = { plan: 'pro', kind: 'any', within: '48h' };
 
   const say = (id, text) => { $(id).textContent = text; };
   const busy = (on) => { for (const button of document.querySelectorAll('button')) button.disabled = on; };
@@ -778,7 +828,14 @@ const core = (() => {
     });
   }
   pick('plans', 'plan', (button) => button.dataset.plan);
-  pick('within', 'within', (button) => Number(button.dataset.within));
+  pick('kinds', 'kind', (button) => button.dataset.kind);
+  pick('within', 'within', (button) => button.dataset.within);
+  $('kinds').addEventListener('click', () => {
+    $('any-part').hidden = choice.kind !== 'any';
+    $('one-part').hidden = choice.kind !== 'one';
+  });
+  $('rules-open').addEventListener('click', () => $('rules').showModal());
+  $('rules-close').addEventListener('click', () => $('rules').close());
 
   function paint(canvas, picture, scale) {
     const quiet = 4, side = (picture.size + quiet * 2) * scale;
@@ -805,7 +862,7 @@ const core = (() => {
       what.textContent = row.plan + ', ' + row.lasts + (row.note ? '  ·  ' + row.note : '');
       const rest = document.createElement('div');
       rest.className = 'soft';
-      rest.textContent = 'Made ' + row.on + '  ·  use by ' + row.useBy + (row.phone ? '  ·  phone ' + row.phone : '');
+      rest.textContent = 'Made ' + row.on + '  ·  ' + (row.useBy === 'never' ? 'never expires' : 'use by ' + row.useBy) + (row.phone ? '  ·  phone ' + row.phone : '');
       line.appendChild(what);
       line.appendChild(rest);
       body.appendChild(line);
@@ -815,21 +872,21 @@ const core = (() => {
   async function make(days) {
     say('problem', '');
     if (!keys) return lockNow();
+    const onePhone = choice.kind === 'one';
     let phone = null;
-    const typed = $('phone').value.trim();
-    if (typed) {
-      phone = core.phoneBytes(typed);
-      if (!phone) return say('problem', 'That is not a phone code. It is eight letters and digits, shown in NetPermit on the Plans page under "Have a code?", for example K7QF-2M9X.');
+    if (onePhone) {
+      phone = core.phoneBytes($('phone').value.trim());
+      if (!phone) return say('problem', 'Type that phone\'s code first. It is eight letters and digits, shown in NetPermit on the Plans page under "Have a code?", for example K7QF-2M9X.');
     }
     const note = $('note').value.trim().slice(0, 120);
     const now = new Date();
-    const lastDay = core.epochDay(now) + choice.within;
+    const lastDay = core.lastDayFor(onePhone, core.WAITS[choice.within], now.getTime());
     busy(true);
     try {
       const code = await core.compose(keys, { plan: choice.plan, days, lastDay, phone });
       const fresh = {
         code: code.code, link: site + '/redeem.html#' + code.compact, plan: choice.plan === 'pro' ? 'Pro' : 'Plus',
-        lasts: LASTS[days], useBy: core.dayText(lastDay), phone: phone ? core.phoneText(phone) : '', note,
+        lasts: LASTS[days], useBy: core.endsText(lastDay), phone: phone ? core.phoneText(phone) : '', note,
       };
       // The list says what was given to whom. It never holds a code.
       const rows = read(MADE) || [];
@@ -838,7 +895,7 @@ const core = (() => {
       clearResult();
       made = fresh;
       say('what', 'NetPermit ' + fresh.plan + ', ' + fresh.lasts + (note ? '  ·  for ' + note : ''));
-      say('terms', 'Works if used by ' + fresh.useBy + (fresh.phone ? ', on the phone ' + fresh.phone + ' only.' : ', on any phone.'));
+      say('terms', core.termsText(fresh.useBy, fresh.phone));
       say('link', fresh.link);
       say('code', fresh.code);
       paint($('qr'), core.qr(fresh.link), 8);
@@ -859,7 +916,8 @@ const core = (() => {
   }
   for (const button of document.querySelectorAll('button.make')) button.addEventListener('click', () => make(Number(button.dataset.days)));
 
-  const words = () => 'A NetPermit ' + made.plan + ' code for you (' + made.lasts + '). Open this link on your Android phone by ' + made.useBy + ':';
+  const words = () => 'A NetPermit ' + made.plan + ' code for you (' + made.lasts + '). Open this link on your Android phone' +
+    (made.useBy === 'never' ? ':' : ' before ' + made.useBy + ':');
   async function copy(text, what) {
     try { await navigator.clipboard.writeText(text); say('said', what + ' copied'); }
     catch (refused) { say('said', 'Press and hold it below, then copy'); }
