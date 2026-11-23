@@ -109,3 +109,16 @@ footer.site { border-top: 1px solid var(--line); background: var(--surface); col
 footer.site .wrap { padding-top: 22px; padding-bottom: 30px; }
 footer.site ul { list-style: none; display: flex; flex-wrap: wrap; gap: 6px 20px; padding: 0; margin: 0 0 10px; }
 footer.site p { margin: 4px 0; }
+
+/* The redeem page: one button, and the code for anyone who has to copy it by hand. */
+a.button, button.button {
+  display: inline-block; font: inherit; font-weight: 650; text-decoration: none; cursor: pointer;
+  padding: 14px 22px; border-radius: 14px; border: 1px solid var(--brand); background: var(--brand);
+  color: var(--brand-ink);
+}
+button.button.quiet { background: transparent; color: var(--ink); border-color: var(--line); font-weight: 500; }
+textarea.code {
+  box-sizing: border-box; width: 100%; font: 14px/1.5 ui-monospace, "SF Mono", Menlo, Consolas, monospace; padding: 12px;
+  border-radius: 12px; border: 1px solid var(--line); background: var(--surface); color: var(--ink);
+  word-break: break-all; resize: vertical;
+}
