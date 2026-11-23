@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src &#x27;none&#x27;; script-src &#x27;sha256-nf+OPc48/T/xUnfqYAshhlz05ATJdOyUp+udiI4TQHI=&#x27;; style-src &#x27;sha256-Qq+jYHkqgcq6RdACGlnDqksi6kZC2Gv7r2hBHCYuzGs=&#x27;; img-src &#x27;self&#x27; blob: data:; manifest-src &#x27;self&#x27;; base-uri &#x27;none&#x27;; form-action &#x27;none&#x27;">
+<meta http-equiv="Content-Security-Policy" content="default-src &#x27;none&#x27;; script-src &#x27;sha256-Tr03zSaOhH9XAYu4BYlneLDS7ZedYHuxEytHPte2XJQ=&#x27;; style-src &#x27;sha256-Qq+jYHkqgcq6RdACGlnDqksi6kZC2Gv7r2hBHCYuzGs=&#x27;; img-src &#x27;self&#x27; blob: data:; manifest-src &#x27;self&#x27;; base-uri &#x27;none&#x27;; form-action &#x27;none&#x27;">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>NetPermit codes</title>
 <meta name="robots" content="noindex, nofollow">
@@ -240,8 +240,10 @@ const core = (() => {
   const PIN_SECRET = 'netpermit-maker-pin-v1:';
   const PIN_ITERATIONS = 2000000;
   // How long a new code can wait to be used (the owner's rule; tools/gift_codes.py has the same).
-  const NEVER = FIRST_DAY + 0xFFFF;                     // a code for one phone does not stop
-  const WAITS = { '48h': 48, '14d': 336, '60d': 1440 }; // a code for any phone has to: hours
+  const NEVER = FIRST_DAY + 0xFFFF;          // a code for one phone does not stop
+  const WAITS = { '10m': 10, '1h': 60, '48h': 2880, '14d': 20160, '60d': 86400 }; // any phone: minutes
+  const SHORTEST_WAIT = 5, LONGEST_WAIT = 365 * 1440;   // clocks disagree by minutes, so not less than five
+  const TO_THE_MINUTE = 0x10;                // added to the plan number of a code that says its last minute
   const EC = { name: 'ECDSA', namedCurve: 'P-256' };
   const SIGN = { name: 'ECDSA', hash: 'SHA-256' };
   const utf8 = (text) => new TextEncoder().encode(text);
@@ -309,15 +311,34 @@ const core = (() => {
   const epochDay = (date) => Math.floor(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()) / 86400000);
   const dayText = (day) => new Date(day * 86400000).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
 
-  // The last day a new code can be used. One phone: never stops, it cannot be passed on. Any
-  // phone: it works wherever it lands, so it stops after [hours]. The app compares whole days from
-  // midnight UTC, so the code is good to the end of the day on which those hours run out.
-  const lastDayFor = (onePhone, hours, nowMillis) => onePhone ? NEVER : Math.floor((nowMillis + hours * 3600000) / 86400000);
+  // When a new code stops. One phone: never, it cannot be passed on. Any phone: it works wherever
+  // it lands, so it stops after [minutes]. A time in whole days is kept as a day, which every
+  // build of the app reads: good to the end of the day (from midnight UTC) on which the time runs
+  // out. Any other time is kept to the minute, for build 10003 and later: good to the end of the
+  // minute in which it runs out.
+  function lastUseFor(onePhone, minutes, nowMillis) {
+    if (onePhone) return { lastDay: NEVER, lastMinute: null };
+    const until = nowMillis + minutes * 60000;
+    if (minutes % 1440 === 0) return { lastDay: Math.floor(until / 86400000), lastMinute: null };
+    const minute = Math.floor(until / 60000);
+    return { lastDay: Math.floor(minute / 1440), lastMinute: minute };
+  }
 
-  // When a code stops being usable, in this phone's own time: the moment the app refuses it.
-  function endsText(lastDay) {
-    if (lastDay >= NEVER) return 'never';
-    const end = new Date((lastDay + 1) * 86400000);
+  // A time such as 10m, 2h or 14d as minutes, if it is one the rule allows.
+  function waitMinutes(text) {
+    const found = /^\s*(\d{1,6})\s*([mhd])\s*$/.exec(String(text).toLowerCase());
+    if (!found) return null;
+    const minutes = Number(found[1]) * { m: 1, h: 60, d: 1440 }[found[2]];
+    return minutes >= SHORTEST_WAIT && minutes <= LONGEST_WAIT ? minutes : null;
+  }
+
+  // When a code stops being usable, in this phone's own time.
+  function endsText(lastDay, lastMinute) {
+    if (lastMinute === null || lastMinute === undefined) {
+      if (lastDay >= NEVER) return 'never';
+    }
+    // A code that says only a day is refused the moment that day, from midnight UTC, is over.
+    const end = lastMinute === null || lastMinute === undefined ? new Date((lastDay + 1) * 86400000) : new Date(lastMinute * 60000);
     return end.toLocaleDateString('en-GB', { weekday: 'long' }) + ' ' + end.getDate() + ' ' + end.toLocaleDateString('en-GB', { month: 'long' }) + ', ' +
       end.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }).replace(/\s/g, ' ');
   }
@@ -394,7 +415,8 @@ const core = (() => {
   }
 
   // ---- a code -------------------------------------------------------------------------------
-  // wanted: { plan: 'pro' | 'plus', days: 0 for good, lastDay: epoch day, phone: 5 bytes or null }
+  // wanted: { plan: 'pro' | 'plus', days: 0 for good, lastDay: epoch day, phone: 5 bytes or null,
+  //           lastMinute: epoch minute for a code timed to the minute, else null }
   async function compose(keys, wanted) {
     const last = wanted.lastDay - FIRST_DAY;
     const whole = (value) => Number.isInteger(value) && value >= 0 && value <= 0xFFFF;
@@ -404,6 +426,14 @@ const core = (() => {
     payload[1] = wanted.days >>> 8; payload[2] = wanted.days & 255;
     payload[3] = last >>> 8; payload[4] = last & 255;
     payload.set(crypto.getRandomValues(new Uint8Array(6)), 5);
+    if (wanted.lastMinute !== null && wanted.lastMinute !== undefined) {
+      // Timed to the minute: for any phone, with the minute where a phone would go.
+      const count = wanted.lastMinute - FIRST_DAY * 1440;
+      if (wanted.phone || !Number.isInteger(count) || count < 0 || Math.floor(wanted.lastMinute / 1440) !== wanted.lastDay) throw new Error('outside what a code can hold');
+      payload[0] |= TO_THE_MINUTE;
+      payload[11] = Math.floor(count / 4294967296) & 255;
+      payload[12] = (count >>> 24) & 255; payload[13] = (count >>> 16) & 255; payload[14] = (count >>> 8) & 255; payload[15] = count & 255;
+    }
     if (wanted.phone) payload.set(wanted.phone, 11);
     const prefix = utf8(DOMAIN);
     const message = new Uint8Array(prefix.length + payload.length);
@@ -627,7 +657,7 @@ const core = (() => {
   }
 
   return { FIRST_DAY, NEVER, WAITS, SETUP_SECRET, PIN_SECRET, PIN_ITERATIONS, b32encode, b32decode, normalise, setupCode, phoneBytes, phoneText,
-    b64u, unb64u, hex, epochDay, dayText, lastDayFor, endsText, termsText, parseLocked, unlock, lock, keysFor, compose, qr };
+    b64u, unb64u, hex, epochDay, dayText, lastUseFor, waitMinutes, endsText, termsText, parseLocked, unlock, lock, keysFor, compose, qr };
 })();
 /* core:end */
 
@@ -878,15 +908,19 @@ const core = (() => {
       phone = core.phoneBytes($('phone').value.trim());
       if (!phone) return say('problem', 'Type that phone\'s code first. It is eight letters and digits, shown in NetPermit on the Plans page under "Have a code?", for example K7QF-2M9X.');
     }
+    // The page offers whole days only (48 hours, 14 days, 60 days). A time to the minute is read
+    // by build 10003 and later, and is not offered here until that build is the one people have.
+    const wait = core.WAITS[choice.within];
+    if (!onePhone && !(wait % 1440 === 0)) return say('problem', 'Choose how long it can wait to be used.');
     const note = $('note').value.trim().slice(0, 120);
     const now = new Date();
-    const lastDay = core.lastDayFor(onePhone, core.WAITS[choice.within], now.getTime());
+    const last = core.lastUseFor(onePhone, wait, now.getTime());
     busy(true);
     try {
-      const code = await core.compose(keys, { plan: choice.plan, days, lastDay, phone });
+      const code = await core.compose(keys, { plan: choice.plan, days, lastDay: last.lastDay, lastMinute: last.lastMinute, phone });
       const fresh = {
         code: code.code, link: site + '/redeem.html#' + code.compact, plan: choice.plan === 'pro' ? 'Pro' : 'Plus',
-        lasts: LASTS[days], useBy: core.endsText(lastDay), phone: phone ? core.phoneText(phone) : '', note,
+        lasts: LASTS[days], useBy: core.endsText(last.lastDay, last.lastMinute), phone: phone ? core.phoneText(phone) : '', note,
       };
       // The list says what was given to whom. It never holds a code.
       const rows = read(MADE) || [];
@@ -895,7 +929,7 @@ const core = (() => {
       clearResult();
       made = fresh;
       say('what', 'NetPermit ' + fresh.plan + ', ' + fresh.lasts + (note ? '  ·  for ' + note : ''));
-      say('terms', core.termsText(fresh.useBy, fresh.phone));
+      say('terms', core.termsText(fresh.useBy, fresh.phone) + (last.lastMinute === null ? '' : ' Timed to the minute: their NetPermit must be build 10003 or newer.'));
       say('link', fresh.link);
       say('code', fresh.code);
       paint($('qr'), core.qr(fresh.link), 8);
