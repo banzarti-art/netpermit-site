@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src &#x27;none&#x27;; script-src &#x27;sha256-Tr03zSaOhH9XAYu4BYlneLDS7ZedYHuxEytHPte2XJQ=&#x27;; style-src &#x27;sha256-Qq+jYHkqgcq6RdACGlnDqksi6kZC2Gv7r2hBHCYuzGs=&#x27;; img-src &#x27;self&#x27; blob: data:; manifest-src &#x27;self&#x27;; base-uri &#x27;none&#x27;; form-action &#x27;none&#x27;">
+<meta http-equiv="Content-Security-Policy" content="default-src &#x27;none&#x27;; script-src &#x27;sha256-9wECum9mWq9CWfocOMv4rL7bZEbzpw2tdsrkdQMjoQg=&#x27;; style-src &#x27;sha256-e536MginbBdAjGdqKJFLe8NurTq5miR6hAd1Px3ku3w=&#x27;; img-src &#x27;self&#x27; blob: data:; manifest-src &#x27;self&#x27;; base-uri &#x27;none&#x27;; form-action &#x27;none&#x27;">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>NetPermit codes</title>
 <meta name="robots" content="noindex, nofollow">
@@ -45,6 +45,9 @@ button:disabled { opacity: .5; cursor: default; }
 label { display: block; font-weight: 600; margin: 14px 0 6px; }
 input { font: inherit; width: 100%; padding: 12px; border-radius: 10px; border: 1px solid var(--line); background: var(--bg); color: var(--ink); }
 input.code { letter-spacing: .08em; text-transform: uppercase; }
+input.amount { width: 6.5em; flex: 0 0 auto; }
+select { font: inherit; padding: 12px; border-radius: 10px; border: 1px solid var(--line); background: var(--bg); color: var(--ink); }
+#other-part { align-items: center; }
 details { margin-top: 14px; }
 summary { cursor: pointer; color: var(--accent); font-weight: 600; padding: 6px 0; }
 .qr { background: #ffffff; border-radius: 12px; padding: 4px; margin: 4px auto 14px; max-width: 320px; }
@@ -146,11 +149,24 @@ dialog li { margin-bottom: 10px; }
       <div id="any-part">
         <label>If nobody uses it, it stops working after</label>
         <div class="row" id="within">
+          <button class="pick" type="button" data-within="10m" aria-pressed="false">10 minutes</button>
+          <button class="pick" type="button" data-within="1h" aria-pressed="false">1 hour</button>
           <button class="pick" type="button" data-within="48h" aria-pressed="true">48 hours</button>
           <button class="pick" type="button" data-within="14d" aria-pressed="false">14 days</button>
           <button class="pick" type="button" data-within="60d" aria-pressed="false">60 days</button>
+          <button class="pick" type="button" data-within="other" aria-pressed="false">Other</button>
+        </div>
+        <div class="row gap" id="other-part" hidden>
+          <input class="amount" id="other-amount" type="number" min="1" max="999999" step="1" value="30" inputmode="numeric" aria-label="How long">
+          <select id="other-unit" aria-label="Minutes, hours or days">
+            <option value="m">minutes</option>
+            <option value="h">hours</option>
+            <option value="d">days</option>
+          </select>
+          <span class="soft">From 5 minutes to 365 days.</span>
         </div>
         <p class="soft gap">Until then it works on every phone it reaches, so shorter is safer.</p>
+        <p class="soft" id="short-note" hidden>A time that is not a whole number of days goes by the clock of the phone that uses the code, and that phone needs NetPermit build 10003 or newer. An older build says the code is not valid.</p>
       </div>
       <div id="one-part" hidden>
         <label for="phone">That phone's code</label>
@@ -216,7 +232,8 @@ dialog li { margin-bottom: 10px; }
     <h2>How codes work</h2>
     <ul>
       <li><strong>One phone only.</strong> Works on that phone and no other, so it cannot be passed on. It never expires. You need that phone's code first: in NetPermit, the gear, Plans, under "Have a code?".</li>
-      <li><strong>Any phone.</strong> Works on every phone it reaches until it stops: after 48 hours, or after 14 or 60 days if you choose that. Send it to one person. Never post it.</li>
+      <li><strong>Any phone.</strong> Works on every phone it reaches until it stops: after 48 hours, or after the time you choose, from 5 minutes to 365 days. Send it to one person. Never post it.</li>
+      <li><strong>Short times.</strong> A time in whole days works with every build. Any other time, such as 10 minutes or 1 hour, goes by the clock of the phone that uses the code, and that phone needs NetPermit build 10003 or newer.</li>
       <li><strong>Once per phone.</strong> A phone accepts a code one time. The 7 days, 30 days or year start when the code is used, not when you make it. If the app is erased and installed again, a code that has not stopped works again on that phone.</li>
       <li><strong>Sent is sent.</strong> A code cannot be cancelled. For anything valuable, above all a permanent gift, choose One phone only.</li>
       <li><strong>Gifts, not sales.</strong> Google requires anything sold in the app to go through Google Play.</li>
@@ -860,6 +877,21 @@ const core = (() => {
   pick('plans', 'plan', (button) => button.dataset.plan);
   pick('kinds', 'kind', (button) => button.dataset.kind);
   pick('within', 'within', (button) => button.dataset.within);
+  // What "Other" stands for: the number and the unit as one word, "25m", "3h" or "5d".
+  function chosenWait() {
+    if (choice.within !== 'other') return choice.within;
+    const amount = Math.floor(Number($('other-amount').value));
+    return (amount > 0 ? amount : 0) + $('other-unit').value;
+  }
+  // Whole days are read by every build; anything else needs the newer one, and the page says so.
+  function showWaitNotes() {
+    $('other-part').hidden = choice.within !== 'other';
+    const minutes = core.waitMinutes(chosenWait());
+    $('short-note').hidden = minutes === null || minutes % 1440 === 0;
+  }
+  $('within').addEventListener('click', showWaitNotes);
+  $('other-amount').addEventListener('input', showWaitNotes);
+  $('other-unit').addEventListener('change', showWaitNotes);
   $('kinds').addEventListener('click', () => {
     $('any-part').hidden = choice.kind !== 'any';
     $('one-part').hidden = choice.kind !== 'one';
@@ -908,10 +940,11 @@ const core = (() => {
       phone = core.phoneBytes($('phone').value.trim());
       if (!phone) return say('problem', 'Type that phone\'s code first. It is eight letters and digits, shown in NetPermit on the Plans page under "Have a code?", for example K7QF-2M9X.');
     }
-    // The page offers whole days only (48 hours, 14 days, 60 days). A time to the minute is read
-    // by build 10003 and later, and is not offered here until that build is the one people have.
-    const wait = core.WAITS[choice.within];
-    if (!onePhone && !(wait % 1440 === 0)) return say('problem', 'Choose how long it can wait to be used.');
+    // One of the buttons, or "Other": a number and a unit, between five minutes and a year. A time
+    // that is not whole days is kept to the minute, which build 10003 and later read; the page
+    // says so beside the choice and again with the code.
+    const wait = onePhone ? null : core.waitMinutes(chosenWait());
+    if (!onePhone && wait === null) return say('problem', 'Choose how long it can wait to be used: from 5 minutes to 365 days.');
     const note = $('note').value.trim().slice(0, 120);
     const now = new Date();
     const last = core.lastUseFor(onePhone, wait, now.getTime());

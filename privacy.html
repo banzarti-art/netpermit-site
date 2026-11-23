@@ -29,7 +29,7 @@
 <main id="main">
   <div class="wrap">
 <h1>Privacy policy</h1>
-<p class="updated">Effective 21 November 2026. This policy covers the NetPermit app for Android
+<p class="updated">Effective 23 November 2026. This policy covers the NetPermit app for Android
 (<code>com.netpermit.app</code>) and this website.</p>
 
 <div class="plain"><p><strong>The short version.</strong> NetPermit controls which apps on your phone
@@ -65,8 +65,11 @@ anything.</p>
   on Pro. You can delete it, or switch recording off, in the app at any time.</li>
   <li><strong>Counts and history.</strong> How many connection attempts were blocked, and when
   protection was on, off or could not be confirmed.</li>
-  <li><strong>App usage time</strong>, only if you choose to grant Android's Usage Access
-  permission. It is optional.</li>
+  <li><strong>App usage time, and which app is open</strong>, only if you choose to grant
+  Android's Usage Access permission. It is optional. NetPermit uses it to show how long apps were
+  used, and to ask about a blocked app you are using rather than about every app that tries to
+  connect in the background. Which app is open is looked at when it is needed and is not
+  kept.</li>
   <li><strong>Device health and security settings</strong> read from Android, for example the
   battery level or whether a screen lock is set, so the app can show them to you.</li>
   <li><strong>Which plan you have.</strong></li>
@@ -98,10 +101,12 @@ only to answer you.</p>
     <tr><td>List of installed apps</td><td>So that every app and system component has a switch.
     Used on the phone only.</td></tr>
     <tr><td>Notifications</td><td>To show that protection is on, to tell you when a new app has been
-    blocked, and to tell you if Android turns NetPermit off.</td></tr>
+    blocked, to tell you if Android turns NetPermit off, and, only if you switch it on, to ask
+    whether to allow a blocked app you are using.</td></tr>
     <tr><td>Run at startup</td><td>So protection comes back after a restart, if you had it on.</td></tr>
-    <tr><td>Usage Access (optional)</td><td>To show how long you used each app. You grant it in
-    Android's settings and can leave it off.</td></tr>
+    <tr><td>Usage Access (optional)</td><td>To show how long you used each app, and to tell which
+    app you have open so that NetPermit asks about that app only. You grant it in Android's
+    settings and can leave it off.</td></tr>
     <tr><td>Internet and network state</td><td>Needed to run a VPN interface and to notice when
     your connection changes between Wi-Fi and mobile data. The app does not contact any
     server.</td></tr>
