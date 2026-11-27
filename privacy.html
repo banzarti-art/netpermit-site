@@ -29,7 +29,7 @@
 <main id="main">
   <div class="wrap">
 <h1>Privacy policy</h1>
-<p class="updated">Effective 23 November 2026. This policy covers the NetPermit app for Android
+<p class="updated">Effective 26 November 2026. This policy covers the NetPermit app for Android
 (<code>com.netpermit.app</code>) and this website.</p>
 
 <div class="plain"><p><strong>The short version.</strong> NetPermit controls which apps on your phone
@@ -65,11 +65,12 @@ anything.</p>
   on Pro. You can delete it, or switch recording off, in the app at any time.</li>
   <li><strong>Counts and history.</strong> How many connection attempts were blocked, and when
   protection was on, off or could not be confirmed.</li>
-  <li><strong>App usage time, and which app is open</strong>, only if you choose to grant
-  Android's Usage Access permission. It is optional. NetPermit uses it to show how long apps were
-  used, and to ask about a blocked app you are using rather than about every app that tries to
-  connect in the background. Which app is open is looked at when it is needed and is not
-  kept.</li>
+  <li><strong>App usage time, data used by each app, and which app is open</strong>, only if you
+  choose to grant Android's Usage Access permission. It is optional. NetPermit uses it to show how
+  long apps were used and how much data each used (Android's own count, read on the phone when you
+  open Insights), and to ask about a blocked app you are using rather than about every app that
+  tries to connect in the background. None of it is kept: it is read again when it is shown, and
+  which app is open is looked at only when it is needed.</li>
   <li><strong>Device health and security settings</strong> read from Android, for example the
   battery level or whether a screen lock is set, so the app can show them to you.</li>
   <li><strong>Which plan you have.</strong></li>
@@ -104,9 +105,12 @@ only to answer you.</p>
     blocked, to tell you if Android turns NetPermit off, and, only if you switch it on, to ask
     whether to allow a blocked app you are using.</td></tr>
     <tr><td>Run at startup</td><td>So protection comes back after a restart, if you had it on.</td></tr>
-    <tr><td>Usage Access (optional)</td><td>To show how long you used each app, and to tell which
-    app you have open so that NetPermit asks about that app only. You grant it in Android's
-    settings and can leave it off.</td></tr>
+    <tr><td>Usage Access (optional)</td><td>To show how long you used each app and how much data
+    each used, and to tell which app you have open so that NetPermit asks about that app only. You
+    grant it in Android's settings and can leave it off.</td></tr>
+    <tr><td>Display over other apps (optional)</td><td>Only on a phone set up as a child's phone,
+    when the parent chooses to stop other apps from opening: it lets NetPermit cover an app the
+    parent has locked with its own screen. Nothing is read or recorded through it.</td></tr>
     <tr><td>Internet and network state</td><td>Needed to run a VPN interface and to notice when
     your connection changes between Wi-Fi and mobile data. The app does not contact any
     server.</td></tr>
@@ -144,7 +148,10 @@ On the publisher's phone it keeps the publisher's own key and list. Like the oth
 anywhere, and the page itself forbids its browser from connecting to anything.</p>
 
 <h2>Children</h2>
-<p>NetPermit is a general tool and is not directed at children. It collects nothing from anyone.</p>
+<p>NetPermit is a general tool and is not directed at children. It collects nothing from anyone.
+A parent can set it up on a child's phone ("Child's phone"); then the parent PIN is kept on that
+phone only, as a one-way hash from which the PIN cannot be read back, and nothing about the child's
+use of the phone is recorded for anyone or sent anywhere.</p>
 
 <h2>Your choices</h2>
 <p>You can delete the blocked-activity record, switch its recording off, pause or turn off
