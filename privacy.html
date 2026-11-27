@@ -29,7 +29,7 @@
 <main id="main">
   <div class="wrap">
 <h1>Privacy policy</h1>
-<p class="updated">Effective 26 November 2026. This policy covers the NetPermit app for Android
+<p class="updated">Effective 27 November 2026. This policy covers the NetPermit app for Android
 (<code>com.netpermit.app</code>) and this website.</p>
 
 <div class="plain"><p><strong>The short version.</strong> NetPermit controls which apps on your phone
@@ -47,6 +47,12 @@ address.</p>
   phone, where they are discarded.</li>
   <li>Apps you <strong>allow</strong> connect to the Internet directly. Their traffic does not pass
   through NetPermit and NetPermit cannot see it.</li>
+  <li>The exception is the <strong>tracker engine test</strong>, off unless you turn it on (Settings
+  and more › Advanced diagnostics). While it is on, the traffic of apps you allow passes through
+  NetPermit's engine on your phone on its way to the Internet, instead of going around it, so that
+  the cost of tracker protection in battery and speed can be measured. NetPermit does not read,
+  store or change what that traffic carries, keeps no record of where it goes and sends nothing
+  about it anywhere; it only counts how much data each app used, by day, on your phone.</li>
 </ul>
 <p>NetPermit never reads, stores or changes the content of any connection, and it does not decrypt
 anything.</p>
@@ -78,11 +84,16 @@ anything.</p>
 </ul>
 
 <h2>What leaves your phone</h2>
-<p>Nothing is sent to us. NetPermit has no analytics, no crash-reporting service, no advertising
-identifier and no cloud backup of its data. Android's own backup of app data is switched off for
-NetPermit. The app itself opens no connection to any server.</p>
-<p>Two things involve someone else, and only when you choose them:</p>
+<p>Nothing is sent to us. NetPermit has no analytics, no crash-reporting service and no advertising
+identifier. Android's own backup takes none of NetPermit's data, with the one exception below. The
+app itself opens no connection to any server.</p>
+<p>Three things involve someone else, and only when you choose them:</p>
 <ul>
+  <li><strong>Starting the free week of Pro.</strong> The date the week started is put in your
+  phone's own Google backup, so that removing and reinstalling NetPermit does not start another
+  week. Android sends it to your Google account, not to us, and we cannot see it. It is that date
+  and nothing else: your rules, your apps and your history are never in the backup. With Android
+  backup switched off, it stays on the phone.</li>
   <li><strong>Buying a plan.</strong> Purchases are handled by Google Play under Google's terms and
   privacy policy. NetPermit asks Google Play which plan you have, and learns only that. We do not
   receive your name, your email address or your payment details from the app.</li>
